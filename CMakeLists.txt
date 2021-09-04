@@ -7,7 +7,7 @@ include(cmake/PreventInSourceBuilds.cmake)
 
 # Link this 'library' to set the c++ standard / compile-time options requested
 add_library(project_options INTERFACE)
-target_compile_features(project_options INTERFACE cxx_std_17)
+target_compile_features(project_options INTERFACE cxx_std_20)
 
 if(CMAKE_CXX_COMPILER_ID MATCHES ".*Clang")
   option(ENABLE_BUILD_WITH_TIME_TRACE "Enable -ftime-trace to generate time tracing .json files on clang" OFF)
@@ -77,10 +77,13 @@ if(ENABLE_FUZZING)
   add_subdirectory(fuzz_test)
 endif()
 
+add_library(assets_lib INTERFACE)
+target_compile_definitions(assets_lib INTERFACE -DASSET_DIR="${CMAKE_CURRENT_SOURCE_DIR}/assets")
+
 add_subdirectory(src)
 
 option(ENABLE_UNITY "Enable Unity builds of projects" OFF)
 if(ENABLE_UNITY)
   # Add for any project you want to apply unity builds for
-  set_target_properties(intro PROPERTIES UNITY_BUILD ON)
+  set_target_properties(mvg2 PROPERTIES UNITY_BUILD ON)
 endif()
